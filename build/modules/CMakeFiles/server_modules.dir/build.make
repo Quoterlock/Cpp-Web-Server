@@ -97,19 +97,51 @@ modules/CMakeFiles/server_modules.dir/router.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server_modules.dir/router.cpp.s"
 	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/router.cpp -o CMakeFiles/server_modules.dir/router.cpp.s
 
+modules/CMakeFiles/server_modules.dir/logger.cpp.o: modules/CMakeFiles/server_modules.dir/flags.make
+modules/CMakeFiles/server_modules.dir/logger.cpp.o: ../modules/logger.cpp
+modules/CMakeFiles/server_modules.dir/logger.cpp.o: modules/CMakeFiles/server_modules.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object modules/CMakeFiles/server_modules.dir/logger.cpp.o"
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT modules/CMakeFiles/server_modules.dir/logger.cpp.o -MF CMakeFiles/server_modules.dir/logger.cpp.o.d -o CMakeFiles/server_modules.dir/logger.cpp.o -c /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/logger.cpp
+
+modules/CMakeFiles/server_modules.dir/logger.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server_modules.dir/logger.cpp.i"
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/logger.cpp > CMakeFiles/server_modules.dir/logger.cpp.i
+
+modules/CMakeFiles/server_modules.dir/logger.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server_modules.dir/logger.cpp.s"
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/logger.cpp -o CMakeFiles/server_modules.dir/logger.cpp.s
+
+modules/CMakeFiles/server_modules.dir/server.cpp.o: modules/CMakeFiles/server_modules.dir/flags.make
+modules/CMakeFiles/server_modules.dir/server.cpp.o: ../modules/server.cpp
+modules/CMakeFiles/server_modules.dir/server.cpp.o: modules/CMakeFiles/server_modules.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object modules/CMakeFiles/server_modules.dir/server.cpp.o"
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT modules/CMakeFiles/server_modules.dir/server.cpp.o -MF CMakeFiles/server_modules.dir/server.cpp.o.d -o CMakeFiles/server_modules.dir/server.cpp.o -c /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/server.cpp
+
+modules/CMakeFiles/server_modules.dir/server.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/server_modules.dir/server.cpp.i"
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/server.cpp > CMakeFiles/server_modules.dir/server.cpp.i
+
+modules/CMakeFiles/server_modules.dir/server.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/server_modules.dir/server.cpp.s"
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/server.cpp -o CMakeFiles/server_modules.dir/server.cpp.s
+
 # Object files for target server_modules
 server_modules_OBJECTS = \
 "CMakeFiles/server_modules.dir/httpParser.cpp.o" \
-"CMakeFiles/server_modules.dir/router.cpp.o"
+"CMakeFiles/server_modules.dir/router.cpp.o" \
+"CMakeFiles/server_modules.dir/logger.cpp.o" \
+"CMakeFiles/server_modules.dir/server.cpp.o"
 
 # External object files for target server_modules
 server_modules_EXTERNAL_OBJECTS =
 
 modules/libserver_modules.a: modules/CMakeFiles/server_modules.dir/httpParser.cpp.o
 modules/libserver_modules.a: modules/CMakeFiles/server_modules.dir/router.cpp.o
+modules/libserver_modules.a: modules/CMakeFiles/server_modules.dir/logger.cpp.o
+modules/libserver_modules.a: modules/CMakeFiles/server_modules.dir/server.cpp.o
 modules/libserver_modules.a: modules/CMakeFiles/server_modules.dir/build.make
 modules/libserver_modules.a: modules/CMakeFiles/server_modules.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX static library libserver_modules.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX static library libserver_modules.a"
 	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && $(CMAKE_COMMAND) -P CMakeFiles/server_modules.dir/cmake_clean_target.cmake
 	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/server_modules.dir/link.txt --verbose=$(VERBOSE)
 

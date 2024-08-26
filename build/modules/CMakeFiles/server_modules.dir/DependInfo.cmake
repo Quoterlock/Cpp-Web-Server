@@ -9,7 +9,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/httpParser.cpp" "modules/CMakeFiles/server_modules.dir/httpParser.cpp.o" "gcc" "modules/CMakeFiles/server_modules.dir/httpParser.cpp.o.d"
+  "/home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/logger.cpp" "modules/CMakeFiles/server_modules.dir/logger.cpp.o" "gcc" "modules/CMakeFiles/server_modules.dir/logger.cpp.o.d"
   "/home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/router.cpp" "modules/CMakeFiles/server_modules.dir/router.cpp.o" "gcc" "modules/CMakeFiles/server_modules.dir/router.cpp.o.d"
+  "/home/admin_user/Documents/GitProjects/Cpp-Web-Server/modules/server.cpp" "modules/CMakeFiles/server_modules.dir/server.cpp.o" "gcc" "modules/CMakeFiles/server_modules.dir/server.cpp.o.d"
   )
 
 # Targets to which this target links.

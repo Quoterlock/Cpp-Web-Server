@@ -103,7 +103,7 @@ CMakeFiles/server.dir/all: modules/CMakeFiles/server_modules.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/server.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles 5
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/server.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles 0
 .PHONY : CMakeFiles/server.dir/rule
@@ -124,12 +124,12 @@ CMakeFiles/server.dir/clean:
 modules/CMakeFiles/server_modules.dir/all:
 	$(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/depend
 	$(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles --progress-num=3,4,5 "Built target server_modules"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles --progress-num=3,4,5,6,7 "Built target server_modules"
 .PHONY : modules/CMakeFiles/server_modules.dir/all
 
 # Build rule for subdir invocation for target.
 modules/CMakeFiles/server_modules.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles 5
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 modules/CMakeFiles/server_modules.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles 0
 .PHONY : modules/CMakeFiles/server_modules.dir/rule

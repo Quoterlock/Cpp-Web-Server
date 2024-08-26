@@ -1,8 +1,12 @@
 file(REMOVE_RECURSE
   "CMakeFiles/server_modules.dir/httpParser.cpp.o"
   "CMakeFiles/server_modules.dir/httpParser.cpp.o.d"
+  "CMakeFiles/server_modules.dir/logger.cpp.o"
+  "CMakeFiles/server_modules.dir/logger.cpp.o.d"
   "CMakeFiles/server_modules.dir/router.cpp.o"
   "CMakeFiles/server_modules.dir/router.cpp.o.d"
+  "CMakeFiles/server_modules.dir/server.cpp.o"
+  "CMakeFiles/server_modules.dir/server.cpp.o.d"
   "libserver_modules.a"
   "libserver_modules.pdb"
 )

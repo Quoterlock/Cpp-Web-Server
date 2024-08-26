@@ -154,6 +154,30 @@ httpParser.cpp.s:
 	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/httpParser.cpp.s
 .PHONY : httpParser.cpp.s
 
+logger.o: logger.cpp.o
+.PHONY : logger.o
+
+# target to build an object file
+logger.cpp.o:
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/logger.cpp.o
+.PHONY : logger.cpp.o
+
+logger.i: logger.cpp.i
+.PHONY : logger.i
+
+# target to preprocess a source file
+logger.cpp.i:
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/logger.cpp.i
+.PHONY : logger.cpp.i
+
+logger.s: logger.cpp.s
+.PHONY : logger.s
+
+# target to generate assembly for a file
+logger.cpp.s:
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/logger.cpp.s
+.PHONY : logger.cpp.s
+
 router.o: router.cpp.o
 .PHONY : router.o
 
@@ -178,6 +202,30 @@ router.cpp.s:
 	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/router.cpp.s
 .PHONY : router.cpp.s
 
+server.o: server.cpp.o
+.PHONY : server.o
+
+# target to build an object file
+server.cpp.o:
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/server.cpp.o
+.PHONY : server.cpp.o
+
+server.i: server.cpp.i
+.PHONY : server.i
+
+# target to preprocess a source file
+server.cpp.i:
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/server.cpp.i
+.PHONY : server.cpp.i
+
+server.s: server.cpp.s
+.PHONY : server.s
+
+# target to generate assembly for a file
+server.cpp.s:
+	cd /home/admin_user/Documents/GitProjects/Cpp-Web-Server/build && $(MAKE) $(MAKESILENT) -f modules/CMakeFiles/server_modules.dir/build.make modules/CMakeFiles/server_modules.dir/server.cpp.s
+.PHONY : server.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -190,9 +238,15 @@ help:
 	@echo "... httpParser.o"
 	@echo "... httpParser.i"
 	@echo "... httpParser.s"
+	@echo "... logger.o"
+	@echo "... logger.i"
+	@echo "... logger.s"
 	@echo "... router.o"
 	@echo "... router.i"
 	@echo "... router.s"
+	@echo "... server.o"
+	@echo "... server.i"
+	@echo "... server.s"
 .PHONY : help
 
 
