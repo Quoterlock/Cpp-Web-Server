@@ -1,6 +1,0 @@
-/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles/server.dir
-/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles/edit_cache.dir
-/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/CMakeFiles/rebuild_cache.dir
-/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules/CMakeFiles/server_modules.dir
-/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules/CMakeFiles/edit_cache.dir
-/home/admin_user/Documents/GitProjects/Cpp-Web-Server/build/modules/CMakeFiles/rebuild_cache.dir
