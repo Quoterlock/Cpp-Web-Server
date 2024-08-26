@@ -1,2 +1,0 @@
-/usr/bin/ar qc libserver_modules.a CMakeFiles/server_modules.dir/httpParser.cpp.o CMakeFiles/server_modules.dir/router.cpp.o CMakeFiles/server_modules.dir/logger.cpp.o CMakeFiles/server_modules.dir/server.cpp.o
-/usr/bin/ranlib libserver_modules.a
