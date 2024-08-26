@@ -36,7 +36,7 @@ void HttpServer::run(){
 
     // process clients
     while(true){
-        std::cout << "Waiting for client...\n";
+        _logger.log("Waiting for client...");
         struct sockaddr_in clientAddr;
         socklen_t clientSize = sizeof(clientAddr);
         int clientSocket = accept(_serverSocket, (struct sockaddr*)&clientAddr, &clientSize);
@@ -44,7 +44,7 @@ void HttpServer::run(){
         auto pid = fork();
         if(pid == 0) {
             // child
-            std::cout << "Client connected\n";
+            _logger.log("Client connected");
             handleClient(clientSocket);
             close(clientSocket);
         } else if(pid > 0) {
@@ -68,7 +68,7 @@ void HttpServer::handleClient(int clientSocket) {
     memset(buffer, 0, BUFFER_SIZE);
     int bytesReceived = recv(clientSocket, buffer, BUFFER_SIZE, 0);
     if(bytesReceived == -1){
-        std::cerr << "Error receiving message!\n";
+        _logger.log("Error receiving message!");
         exit(EXIT_FAILURE);
     }
     
@@ -80,7 +80,7 @@ void HttpServer::handleClient(int clientSocket) {
     // send a response
     int bytesSent = send(clientSocket, responseStr.c_str(), strlen(responseStr.c_str()), 0);            
     if(bytesSent == -1) {
-        std::cerr << "Error sending response\n";
+        _logger.log("Error sending response");
         exit(EXIT_FAILURE);
     }
 }
@@ -110,6 +110,6 @@ void HttpServer::initServerSocket(){
     if(listen(_serverSocket, _maxClientsCount) == -1) {
         _logger.log("Error listening!");
     } else {
-        _logger.log("Listen port : " + std::to_string(_port)); 
+        _logger.log("Listening port " + std::to_string(_port)); 
     }
 }

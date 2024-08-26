@@ -12,11 +12,11 @@ Logger::Logger(std::string title){
 void Logger::log(std::string msg) {
     // log in console
     if(_logToConsole)
-        std::cout << "["<< _title << "]:" << msg << "\n";
+        std::cout << "["<< _title << "] " << msg << "\n";
     
     // TODO: log in file
     if(_logToFile)
-        std::cout << "Cannot log to file";
+        std::cout << "[Logger] Cannot log to file";
 }
 
 void Logger::logToFile(std::string filePath){
