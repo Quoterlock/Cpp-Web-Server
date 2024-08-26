@@ -15,7 +15,7 @@
 #include <iomanip>
 #include <ctime>
 
-std::string getHtmlContent(std::string path){
+std::string Router::getHtmlContent(std::string path){
     std::ifstream htmlFile(path);
     if (htmlFile.is_open()) {
         std::string content((std::istreambuf_iterator<char>(htmlFile)),
@@ -27,14 +27,14 @@ std::string getHtmlContent(std::string path){
     return "";
 }
 
-httpResponse getNotFoundResponse(){
+httpResponse Router::getNotFoundResponse(){
     httpResponse res;
     res.status_code = 404;
     res.status_message = "Not found";
     return res;
 }
 
-httpResponse getBadRequest(std::string msg){
+httpResponse Router::getBadRequest(std::string msg){
     httpResponse res;
     res.status_code = 500;
     res.status_message = "Bad request";
@@ -42,7 +42,7 @@ httpResponse getBadRequest(std::string msg){
     return res;
 }
 
-httpResponse getHtmlPageResponse(std::string pageName){
+httpResponse Router::getHtmlPageResponse(std::string pageName){
     httpResponse res;
     res.status_code = 200;
     res.headers.emplace_back("Content-Type", "text/html");
@@ -52,19 +52,19 @@ httpResponse getHtmlPageResponse(std::string pageName){
     return res;
 }
 
-httpResponse homePage(httpRequest request){
+httpResponse Router::homePage(httpRequest request){
     return getHtmlPageResponse("home");
 }
 
-httpResponse aboutPage(httpRequest req){
+httpResponse Router::aboutPage(httpRequest req){
     return getHtmlPageResponse("about");
 }
 
-httpResponse updatesPage(httpRequest req){
+httpResponse Router::updatesPage(httpRequest req){
     return getHtmlPageResponse("updates");
 }
 
-httpResponse route(httpRequest request){
+httpResponse Router::route(httpRequest request){
     auto path = request.path;   
     std::cout << "[Router] Request path=" 
         << path << ", method=" << request.method;
