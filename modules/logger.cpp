@@ -16,7 +16,7 @@ void Logger::log(std::string msg) {
     
     // TODO: log in file
     if(_logToFile)
-        std::cout << "[Logger] Cannot log to file";
+        std::cout << "[Logger] Cannot log to file\n";
 }
 
 void Logger::logToFile(std::string filePath){
