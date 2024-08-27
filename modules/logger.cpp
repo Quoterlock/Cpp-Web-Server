@@ -7,6 +7,8 @@ Logger::Logger(){
 
 Logger::Logger(std::string title){
     _title = title;
+    _logToFile = false;
+    _logToConsole = false;
 }
 
 void Logger::log(std::string msg) {

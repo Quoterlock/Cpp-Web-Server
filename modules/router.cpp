@@ -166,11 +166,11 @@ httpResponse Router::route(httpRequest request){
             _logger.log("path item: " + item);
         }
         if(strcmp(splitPath[0].c_str(), "static") == 0){
-            if(strcmp(splitPath[1].c_str(), "styles") == 0) {
-                auto body = getFileContent("styles/" + splitPath[2]);
+            if(strcmp(splitPath[1].c_str(), "css") == 0) {
+                auto body = getStaticResource("css/" + splitPath[2]);
                 return getStaticFileResponse(body, "css");
             } else if(strcmp(splitPath[1].c_str(), "js") == 0) {
-                auto body = getFileContent("js/" + splitPath[2]);
+                auto body = getStaticResource("js/" + splitPath[2]);
                 return getStaticFileResponse(body, "js");
             } else {
                 response = getNotFoundResponse();
