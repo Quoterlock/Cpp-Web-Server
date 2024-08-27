@@ -1,6 +1,7 @@
 #include "httpReq.h"
 #include "httpRes.h"
 #include "router.h"
+#include "pagesManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -110,7 +111,7 @@ httpResponse Router::getHtmlPageResponse(std::string pageName){
     httpResponse res;
     res.status_code = 200;
     res.headers.emplace_back("Content-Type", "text/html");
-    res.body = getFileContent(_pagesPath + pageName + ".html");
+    res.body = _pages.getPage(pageName);
     if(res.body == "")
         return getBadRequest("Page not found");
     return res;
@@ -131,16 +132,13 @@ httpResponse Router::updatesPage(httpRequest req){
 /* public methods */
 
 Router::Router(){}
-Router::Router(Logger logger){
+Router::Router(Logger logger, HtmlRenderEngine htmlRenderer){
     _logger = logger;
+    _pages = htmlRenderer;
 }
 
 void Router::setStaticFilesPath(std::string path){
     _staticFilesPath = path;
-}
-
-void Router::setPagesPath(std::string path){
-    _pagesPath = path;
 }
 
 httpResponse Router::route(httpRequest request){

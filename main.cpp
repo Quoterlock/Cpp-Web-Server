@@ -1,13 +1,17 @@
 #include "router.h"
 #include "logger.h"
 #include "server.h"
+#include "pagesManager.h"
 
 int main(){
-    Logger logger = Logger("Server");
+    Logger logger("Server");
     logger.logToConsole();
 
-    Router router = Router(logger);
-    router.setPagesPath("../pages/");
+    HtmlRenderEngine pages;
+    pages.setPagesPath("../pages/");
+    pages.setComponentsPath("../pages/components/");
+
+    Router router(logger, pages);
     router.setStaticFilesPath("../www/");
 
     // TODO: Add error handling

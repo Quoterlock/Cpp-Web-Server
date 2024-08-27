@@ -2,12 +2,13 @@
 #include "httpReq.h"
 #include "httpRes.h"
 #include "logger.h"
+#include "pagesManager.h"
 
 class Router {
     private:
         std::string _staticFilesPath;
-        std::string _pagesPath;
         Logger _logger;
+        HtmlRenderEngine _pages;
         httpResponse getNotFoundResponse();
         httpResponse getBadRequest(std::string msg);
         httpResponse getHtmlPageResponse(std::string pageName);
@@ -17,8 +18,7 @@ class Router {
         std::string getStaticResource(std::string href);
     public:
         Router();
-        Router(Logger logger);
+        Router(Logger logger, HtmlRenderEngine htmlRenderer);
         void setStaticFilesPath(std::string path);
-        void setPagesPath(std::string path);
         httpResponse route(httpRequest request);
 };
