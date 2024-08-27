@@ -2,6 +2,7 @@
 #include "httpRes.h"
 #include "router.h"
 #include "pagesManager.h"
+#include "staticFilesManager.h"
 
 #include <iostream>
 #include <fstream>
@@ -26,6 +27,7 @@ std::string getContentType(const std::string& type) {
         {"jpg", "image/jpeg"},
         {"jpeg", "image/jpeg"},
         {"gif", "image/gif"},
+        {"ico", "image/x-icon"},
         {"json", "application/json"},
         // Add more types as needed
     };
@@ -74,24 +76,6 @@ std::vector<std::string> parsePath(const std::string& path) {
     return tokens;
 }
 
-std::string getFileContent(std::string path){
-    std::ifstream file(path);
-    if (file.is_open()) {
-        std::string content((std::istreambuf_iterator<char>(file)),
-                             std::istreambuf_iterator<char>());
-        file.close();
-        return content;
-    }
-    file.close();
-    return "";
-}
-
-
-/* Private methods */
-std::string Router::getStaticResource(std::string href){
-    return getFileContent(_staticFilesPath + href);
-}
-
 httpResponse Router::getNotFoundResponse(){
     httpResponse res;
     res.status_code = 404;
@@ -132,13 +116,13 @@ httpResponse Router::updatesPage(httpRequest req){
 /* public methods */
 
 Router::Router(){}
-Router::Router(Logger logger, HtmlRenderEngine htmlRenderer){
+Router::Router(
+    Logger logger, 
+    HtmlRenderEngine htmlRenderer,
+    StaticFilesManager staticFiles){
     _logger = logger;
     _pages = htmlRenderer;
-}
-
-void Router::setStaticFilesPath(std::string path){
-    _staticFilesPath = path;
+    _files = staticFiles;
 }
 
 httpResponse Router::route(httpRequest request){
@@ -157,26 +141,33 @@ httpResponse Router::route(httpRequest request){
     else if(strcmp(path.c_str(), "/updates") == 0) {
         response = updatesPage(request);
     }
+    else if(strcmp(path.c_str(), "/favicon.ico") == 0){
+        auto body = _files.getSiteIcon();
+        _logger.log("Icon body:\n" + body);
+        response = getStaticFileResponse(body, "ico");
+    }
     else { 
-        // handle static files
-        auto splitPath = parsePath(path);
+        response = handleStaticFiles(path);
+    }
+    return response;
+}
+
+httpResponse Router::handleStaticFiles(std::string reqPath){
+    auto splitPath = parsePath(reqPath);
         for(auto item : splitPath){
             _logger.log("path item: " + item);
         }
         if(strcmp(splitPath[0].c_str(), "static") == 0){
             if(strcmp(splitPath[1].c_str(), "css") == 0) {
-                auto body = getStaticResource("css/" + splitPath[2]);
+                auto body = _files.getStaticFile("css/"+ splitPath[2]);
                 return getStaticFileResponse(body, "css");
             } else if(strcmp(splitPath[1].c_str(), "js") == 0) {
-                auto body = getStaticResource("js/" + splitPath[2]);
+                auto body = _files.getStaticFile("js/" + splitPath[2]);
                 return getStaticFileResponse(body, "js");
             } else {
-                response = getNotFoundResponse();
+                return getNotFoundResponse();
             }
         } else {
-            response = getNotFoundResponse();
+            return getNotFoundResponse();
         }
-        
-    }
-    return response;
 }

@@ -2,6 +2,7 @@
 #include "logger.h"
 #include "server.h"
 #include "pagesManager.h"
+#include "staticFilesManager.h"
 
 int main(){
     Logger logger("Server");
@@ -11,8 +12,10 @@ int main(){
     pages.setPagesPath("../pages/");
     pages.setComponentsPath("../pages/components/");
 
-    Router router(logger, pages);
-    router.setStaticFilesPath("../www/");
+    StaticFilesManager files;
+    files.setStaticFilesPath("../www/");
+
+    Router router(logger, pages, files);
 
     // TODO: Add error handling
     HttpServer server = HttpServer(logger, router);

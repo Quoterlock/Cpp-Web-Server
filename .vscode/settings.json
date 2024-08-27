@@ -66,6 +66,13 @@
         "thread": "cpp",
         "typeinfo": "cpp",
         "map": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "bitset": "cpp",
+        "charconv": "cpp",
+        "optional": "cpp",
+        "regex": "cpp",
+        "format": "cpp",
+        "span": "cpp",
+        "variant": "cpp"
     }
 }
