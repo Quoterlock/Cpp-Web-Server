@@ -7,6 +7,7 @@ class Logger {
         bool _logToFile;
         std::string _logFilePath;
         bool _logToConsole;
+        void logToFileInternal(const std::string &msg);
     public: 
         Logger();
         void log(std::string msg);

@@ -6,3 +6,4 @@
 
 std::string encodeResponse(httpResponse response);
 httpRequest decodeHttp(std::string msg);
+void decodeCookies(std::string value, httpRequest& request);

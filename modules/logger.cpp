@@ -1,5 +1,6 @@
 #include "logger.h"
 #include <iostream>
+#include <fstream>
 
 Logger::Logger(){
     _title = "Log";
@@ -18,7 +19,7 @@ void Logger::log(std::string msg) {
     
     // TODO: log in file
     if(_logToFile)
-        std::cout << "[Logger] Cannot log to file\n";
+        logToFileInternal(msg); 
 }
 
 void Logger::logToFile(std::string filePath){
@@ -29,4 +30,16 @@ void Logger::logToFile(std::string filePath){
 
 void Logger::logToConsole(){
     _logToConsole = true;
+}
+
+void Logger::logToFileInternal(const std::string &msg) {
+        // Open the file in append mode
+        std::ofstream logFile(_logFilePath, std::ios::app); // Open file in append mode
+        
+        if (logFile.is_open()) {
+            logFile << "[" << _title << "] " << msg << "\n"; // Write the message to the file
+            logFile.close(); // Close the file after writing
+        } else {
+            std::cerr << "[Logger] Cannot log to file: " << _logFilePath << "\n";
+        }
 }

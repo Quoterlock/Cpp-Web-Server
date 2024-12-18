@@ -41,6 +41,7 @@ void HttpServer::run(){
         socklen_t clientSize = sizeof(clientAddr);
         int clientSocket = accept(_serverSocket, (struct sockaddr*)&clientAddr, &clientSize);
         
+        // TODO: Rework for threads pool
         auto pid = fork();
         if(pid == 0) {
             // child

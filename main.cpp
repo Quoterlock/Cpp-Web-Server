@@ -5,8 +5,10 @@
 #include "staticFilesManager.h"
 
 int main(){
+    // config
     Logger logger("Server");
     logger.logToConsole();
+    logger.logToFile("log.txt");
 
     HtmlRenderEngine pages;
     pages.setPagesPath("../pages/");

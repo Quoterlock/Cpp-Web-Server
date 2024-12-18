@@ -143,7 +143,7 @@ httpResponse Router::route(httpRequest request){
     }
     else if(strcmp(path.c_str(), "/favicon.ico") == 0){
         auto body = _files.getSiteIcon();
-        _logger.log("Icon body:\n" + body);
+        //_logger.log("Icon body:\n" + body);
         response = getStaticFileResponse(body, "ico");
     }
     else { 
