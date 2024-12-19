@@ -16,7 +16,7 @@ std::string trimR(std::string value){
 std::string trimL(std::string value){
     auto iterator = find_if(value.begin(), value.end(),
             [](char i){ // find all spaces
-                return !std::isspace(i);
+                return !std::isspace(i); 
             }); // and remove them
     return value.substr(iterator - value.begin());
 }

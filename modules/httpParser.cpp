@@ -13,6 +13,14 @@ std::string sanitize(std::string value) {
 }
 
 httpRequest decodeHttp(std::string msg) {
+    /* Message structure
+     * <METHOD> <ROUTE> HTTP/1.1 \r\n
+     * <HEADER>: <VALUE> \r\n
+     * Cookie: <COOKIE>; <COOKIE> \r\n
+     * <EMPTY LINE> \r\n
+     * <BODY>
+     */
+
     httpRequest request;
 
     // Split the request into lines
@@ -26,26 +34,32 @@ httpRequest decodeHttp(std::string msg) {
 
     // Parse headers
     while (std::getline(iss, line) && !line.empty()) {
+        // check on end of headers
+        if(line == "\r")
+            break;
+
         size_t dividerPos = line.find(':');
         if (dividerPos != std::string::npos) {
-            // add header
             std::string key = sanitize(line.substr(0, dividerPos));
             std::string value = sanitize(line.substr(dividerPos + 1));
-            request.headers[key] = value;
-
-            // parse cookies
+           
             if (key == "Cookie")
                 decodeCookies(value, request);
+            else 
+                request.headers[key] = value;
         }
     }
 
     // Parse body
-    // The body might be empty or span multiple lines, adjust accordingly
     std::ostringstream bodyStream;
-    while (std::getline(iss, line))
-        bodyStream << line << "\n"; // Append each line of the body
+    // combine lines with \n (except last line)
+    if(std::getline(iss, line)){
+        bodyStream << line;
+        while (std::getline(iss, line))
+            bodyStream << "\n" << line;
+    }
     request.body = bodyStream.str(); // Set the body content
-
+    
     return request;
 }
 
