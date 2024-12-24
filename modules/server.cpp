@@ -27,11 +27,11 @@ void log(std::string msg){
 void* HttpServer::clientHandler(){
     // init
     HtmlRenderEngine pages;
-    pages.setPagesPath("../pages/");
-    pages.setComponentsPath("../pages/components/");
+    pages.setPagesPath(config.pagesPath);
+    pages.setComponentsPath(config.componentsPath);
 
     StaticFilesManager files;
-    files.setStaticFilesPath("../www/");
+    files.setStaticFilesPath(config.staticFilesPath);
 
     Router router(Logger("Router"), pages, files);
 
@@ -59,7 +59,8 @@ void* HttpServer::clientHandler(){
         int bytesReceived = recv(clientSocket, buffer, BUFFER_SIZE, 0);
         if(bytesReceived == -1){
             log("Error receiving message!");
-            exit(EXIT_FAILURE);
+            close(clientSocket);
+            continue; // get next task
         } 
         log(buffer);
     
@@ -74,7 +75,8 @@ void* HttpServer::clientHandler(){
 
         if(bytesSent == -1) {
             log("Error sending response");
-            exit(EXIT_FAILURE);
+            close(clientSocket);
+            continue; // get next task
         }
         log("Worker: close client socket");
         close(clientSocket);
