@@ -3,6 +3,7 @@
 #include "server.h"
 #include "pagesManager.h"
 #include "staticFilesManager.h"
+#include "serverConfig.h"
 
 int main(){
     // config
@@ -17,12 +18,20 @@ int main(){
     StaticFilesManager files;
     files.setStaticFilesPath("../www/");
 
-    Router router(logger, pages, files);
+    //Router router(logger, pages, files);
 
     // TODO: Add error handling
-    HttpServer server = HttpServer(logger, router);
-    server.setPort(8080);
-    server.run();
+    ServerConfig config = {
+        5050, //port
+        "127.0.0.1", // address
+        100, // max connections
+        10, // max threads
+
+        "../pages/",
+        "../pages/components/",
+        "../www/"
+    };
+    runServer(config);
     
     return 0;
 }
