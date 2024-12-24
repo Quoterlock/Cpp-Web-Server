@@ -6,21 +6,6 @@
 #include "serverConfig.h"
 
 int main(){
-    // config
-    Logger logger("Server");
-    logger.logToConsole();
-    logger.logToFile("log.txt");
-
-    HtmlRenderEngine pages;
-    pages.setPagesPath("../pages/");
-    pages.setComponentsPath("../pages/components/");
-
-    StaticFilesManager files;
-    files.setStaticFilesPath("../www/");
-
-    //Router router(logger, pages, files);
-
-    // TODO: Add error handling
     ServerConfig config = {
         5050, //port
         "127.0.0.1", // address
@@ -32,6 +17,5 @@ int main(){
         "../www/"
     };
     runServer(config);
-    
     return 0;
 }
