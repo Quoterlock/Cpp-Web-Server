@@ -2,8 +2,10 @@
 #include "logger.h"
 #include "httpParser.h"
 #include "router.h"
+#include "serverConfig.h"
 
 #include <iostream>
+#include <cstring>
 #include <pthread.h>
 #include <vector>
 #include <mutex>
@@ -18,39 +20,12 @@
 #include<arpa/inet.h>
 #include<unistd.h>
 
-std::condition_variable cv;
-std::vector<pthread_t> _workers;
-std::vector<int> _pendingConnections;
-std::mutex _workerMutex;
-std::mutex _consoleMutex;
-bool _stopProcessing = false;
-int _serverSocket;
-
-struct WorkerConfig {
-    std::string pagesPath;
-    std::string componentsPath;
-    std::string staticFilesPath;
-
-    WorkerConfig(std::string pagesPath, 
-            std::string componentsPath, 
-            std::string staticFilesPath)
-        : pagesPath(pagesPath), 
-        componentsPath(componentsPath),
-        staticFilesPath(staticFilesPath)
-    {}
-};
-
 void log(std::string msg){
-    {
-        std::lock_guard<std::mutex> lock(_consoleMutex);
         std::cout << msg << std::endl;
-    }
 }
 
-void* clientHandler(void* args){
+void* HttpServer::clientHandler(){
     // init
-    WorkerConfig* config = static_cast<WorkerConfig*>(args);
-    
     HtmlRenderEngine pages;
     pages.setPagesPath("../pages/");
     pages.setComponentsPath("../pages/components/");
@@ -59,12 +34,14 @@ void* clientHandler(void* args){
     files.setStaticFilesPath("../www/");
 
     Router router(Logger("Router"), pages, files);
+
+    // do the work
     while(true){
         int clientSocket = -1;
         // get a job
         {
             std::unique_lock<std::mutex> lock(_workerMutex);
-            cv.wait(lock, []{
+            cv.wait(lock, [this]{
                 return !_pendingConnections.empty() || _stopProcessing;
             });
             if(_stopProcessing)
@@ -102,39 +79,40 @@ void* clientHandler(void* args){
         log("Worker: close client socket");
         close(clientSocket);
     }
-    delete config; 
     return nullptr;
 }
 
-void stopExecution(){
+HttpServer::~HttpServer(){
+    log("Desctructor"); 
+}
+
+void HttpServer::stop(){
+    log("Stop execution");
     {
         std::lock_guard<std::mutex> lock(_workerMutex);
         _stopProcessing = true;
     }
     cv.notify_all();
+
     // wait will all is done
-    for(auto socket : _pendingConnections){
-        log("Close client socket");
-        close(socket); 
-    }
     for(auto worker : _workers){
         log("Join worker thread");
         pthread_join(worker, NULL); 
     }
+
+    for(auto socket : _pendingConnections){
+        log("Close client socket");
+        close(socket); 
+    }
+
     log("Clear vectors...");
     _pendingConnections.clear();
     _workers.clear();
-}
-
-void exitSignalHandler(int sig) {
-    log("Stop execution");
-    stopExecution();
     log("Close server socket");
     close(_serverSocket);
-    exit(0);
 }
 
-void initServerSocket(int port, std::string address, int maxClientsCount){
+void HttpServer::initServerSocket(int port, std::string address, int maxClientsCount){
     // create socket
     _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(_serverSocket == -1) {
@@ -163,18 +141,25 @@ void initServerSocket(int port, std::string address, int maxClientsCount){
     }
 }
 
-void startWorker(const WorkerConfig& config){
+void* HttpServer::clientHandlerWrapper(void* args) {
+    HttpServer* server = static_cast<HttpServer*>(args);
+    return server->clientHandler();  // Call the non-static member function
+}
+
+void HttpServer::startWorker(const WorkerConfig& config){
     log("Start worker");
     pthread_t thread;
     WorkerConfig* configPtr = new WorkerConfig(config);
-    pthread_create( &thread, NULL, clientHandler, (void*)configPtr);
+    pthread_create( &thread, NULL, HttpServer::clientHandlerWrapper, (void*)this);
     _workers.push_back(thread);
 }
 
-void runServer(ServerConfig config){
-    signal(SIGTERM, exitSignalHandler);
-    signal(SIGINT, exitSignalHandler);
-     
+
+HttpServer::HttpServer(ServerConfig config){
+    this->config = config;
+}
+
+void HttpServer::run(){
     //init server socket
     initServerSocket(config.port, config.address, config.maxConnectionsCount);
 
