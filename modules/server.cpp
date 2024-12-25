@@ -20,20 +20,8 @@
 #include<arpa/inet.h>
 #include<unistd.h>
 
-void log(std::string msg){
-        std::cout << msg << std::endl;
-}
-
 void* HttpServer::clientHandler(){
-    // init
-    HtmlRenderEngine pages;
-    pages.setPagesPath(config.pagesPath);
-    pages.setComponentsPath(config.componentsPath);
-
-    StaticFilesManager files;
-    files.setStaticFilesPath(config.staticFilesPath);
-
-    Router router(Logger("Router"), pages, files);
+    Router router(_logger, _pages, _files);
 
     // do the work
     while(true){
@@ -49,7 +37,7 @@ void* HttpServer::clientHandler(){
 
             clientSocket = _pendingConnections.back();
             _pendingConnections.pop_back();
-            log("Worker: Take client socket" + std::to_string(clientSocket));
+            _logger.log("Worker: Take client socket" + std::to_string(clientSocket));
         }
         
         // handle client connection
@@ -58,11 +46,11 @@ void* HttpServer::clientHandler(){
         memset(buffer, 0, BUFFER_SIZE);
         int bytesReceived = recv(clientSocket, buffer, BUFFER_SIZE, 0);
         if(bytesReceived == -1){
-            log("Error receiving message!");
+            _logger.log("Error receiving message!");
             close(clientSocket);
             continue; // get next task
         } 
-        log(buffer);
+        _logger.log(buffer);
     
         // process message
         auto request = decodeHttp(buffer);
@@ -74,22 +62,22 @@ void* HttpServer::clientHandler(){
             strlen(responseStr.c_str()), 0);            
 
         if(bytesSent == -1) {
-            log("Error sending response");
+            _logger.log("Error sending response");
             close(clientSocket);
             continue; // get next task
         }
-        log("Worker: close client socket");
+        _logger.log("Worker: close client socket");
         close(clientSocket);
     }
     return nullptr;
 }
 
 HttpServer::~HttpServer(){
-    log("Desctructor"); 
+    _logger.log("Desctructor"); 
 }
 
 void HttpServer::stop(){
-    log("Stop execution");
+    _logger.log("Stop execution");
     {
         std::lock_guard<std::mutex> lock(_workerMutex);
         _stopProcessing = true;
@@ -98,19 +86,19 @@ void HttpServer::stop(){
 
     // wait will all is done
     for(auto worker : _workers){
-        log("Join worker thread");
+        _logger.log("Join worker thread");
         pthread_join(worker, NULL); 
     }
 
     for(auto socket : _pendingConnections){
-        log("Close client socket");
+        _logger.log("Close client socket");
         close(socket); 
     }
 
-    log("Clear vectors...");
+    _logger.log("Clear vectors...");
     _pendingConnections.clear();
     _workers.clear();
-    log("Close server socket");
+    _logger.log("Close server socket");
     close(_serverSocket);
 }
 
@@ -118,7 +106,7 @@ void HttpServer::initServerSocket(int port, std::string address, int maxClientsC
     // create socket
     _serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if(_serverSocket == -1) {
-        log("Error creating socket!");
+        _logger.log("Error creating socket!");
         exit(EXIT_FAILURE);
     }
     // config address
@@ -127,19 +115,19 @@ void HttpServer::initServerSocket(int port, std::string address, int maxClientsC
     serverAddr.sin_family = AF_INET; // use IPv4
     serverAddr.sin_port = htons(port);
     if(inet_aton(address.c_str(), &serverAddr.sin_addr) <= 0){
-        log("Error converting an address!");
+        _logger.log("Error converting an address!");
         exit(EXIT_FAILURE);
     }
     // bind socket
     if(bind(_serverSocket, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) == -1){
-        log("Error binding server socket");
+        _logger.log("Error binding server socket");
         exit(EXIT_FAILURE);
     }
     // set listener
     if(listen(_serverSocket, maxClientsCount) == -1) {
-        log("Error listening!");
+        _logger.log("Error listening!");
     } else {
-        log("Listening port " + std::to_string(port)); 
+        _logger.log("Listening port " + std::to_string(port)); 
     }
 }
 
@@ -149,7 +137,7 @@ void* HttpServer::clientHandlerWrapper(void* args) {
 }
 
 void HttpServer::startWorker(const WorkerConfig& config){
-    log("Start worker");
+    _logger.log("Start worker");
     pthread_t thread;
     WorkerConfig* configPtr = new WorkerConfig(config);
     pthread_create( &thread, NULL, HttpServer::clientHandlerWrapper, (void*)this);
@@ -158,21 +146,29 @@ void HttpServer::startWorker(const WorkerConfig& config){
 
 
 HttpServer::HttpServer(ServerConfig config){
-    this->config = config;
+    this->_config = config;
+
+    // init
+    _logger.logToConsole();
+    _logger.logToFile(config.logFilePath);
+    _pages.setPagesPath(config.pagesPath);
+    _pages.setComponentsPath(config.componentsPath);
+    _files.setStaticFilesPath(config.staticFilesPath);
+
 }
 
 void HttpServer::run(){
     //init server socket
-    initServerSocket(config.port, config.address, config.maxConnectionsCount);
+    initServerSocket(_config.port, _config.address, _config.maxConnectionsCount);
 
     WorkerConfig workerConfig = {
-        config.pagesPath,
-        config.componentsPath,
-        config.staticFilesPath
+        _config.pagesPath,
+        _config.componentsPath,
+        _config.staticFilesPath
     };
 
     // init workers
-    for(int i = 0; i < config.maxWorkingThreadsCount; i++){
+    for(int i = 0; i < _config.maxWorkingThreadsCount; i++){
         startWorker(workerConfig); 
     }
 
@@ -183,7 +179,7 @@ void HttpServer::run(){
         int clientSocket = accept(_serverSocket, 
                 (struct sockaddr*)&clientAddr, &clientSize);
         if(clientSocket == -1){
-            log("Error accepting client connection");
+            _logger.log("Error accepting client connection");
             continue;
         }
         
@@ -192,7 +188,7 @@ void HttpServer::run(){
         // add to queue
         {
             std::lock_guard<std::mutex> lock(_workerMutex);
-            log("Add client socket to the queue");
+            _logger.log("Add client socket to the queue");
             _pendingConnections.push_back(clientSocket);
         }
         cv.notify_one(); // notify waiting worker about new connection

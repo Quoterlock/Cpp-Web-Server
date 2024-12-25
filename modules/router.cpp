@@ -115,12 +115,10 @@ httpResponse Router::updatesPage(httpRequest req){
 
 /* public methods */
 
-Router::Router(){}
 Router::Router(
-    Logger logger, 
-    HtmlRenderEngine htmlRenderer,
-    StaticFilesManager staticFiles){
-    _logger = logger;
+    Logger& logger, 
+    HtmlRenderEngine& htmlRenderer,
+    StaticFilesManager& staticFiles):_logger(logger){
     _pages = htmlRenderer;
     _files = staticFiles;
 }

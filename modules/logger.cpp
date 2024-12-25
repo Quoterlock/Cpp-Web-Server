@@ -2,30 +2,28 @@
 #include <iostream>
 #include <fstream>
 
-Logger::Logger(){
-    _title = "Log";
+Logger::Logger(): _logFilePath("Log.txt"), _title("Server log"){
 }
 
-Logger::Logger(std::string title){
-    _title = title;
-    _logToFile = false;
-    _logToConsole = false;
+Logger::~Logger(){
+    if(_logFile.is_open())
+        _logFile.close();
 }
 
 void Logger::log(std::string msg) {
-    // log in console
-    if(_logToConsole)
-        std::cout << "["<< _title << "] " << msg << "\n";
-    
-    // TODO: log in file
-    if(_logToFile)
-        logToFileInternal(msg); 
+    {
+        std::lock_guard<std::mutex> lock(_consoleMutex);
+        if(_logToConsole)
+            std::cout << "["<< _title << "] " << msg << "\n";
+        if(_logToFile)
+            logToFileInternal(msg); 
+    }
 }
 
 void Logger::logToFile(std::string filePath){
     _logFilePath = filePath;
+    _logFile.open(_logFilePath, std::ios::app);
     _logToFile = true;
-    // TODO: check file
 }
 
 void Logger::logToConsole(){
@@ -38,7 +36,6 @@ void Logger::logToFileInternal(const std::string &msg) {
         
         if (logFile.is_open()) {
             logFile << "[" << _title << "] " << msg << "\n"; // Write the message to the file
-            logFile.close(); // Close the file after writing
         } else {
             std::cerr << "[Logger] Cannot log to file: " << _logFilePath << "\n";
         }

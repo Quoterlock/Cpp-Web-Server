@@ -10,4 +10,5 @@ struct ServerConfig {
     std::string pagesPath;
     std::string componentsPath;
     std::string staticFilesPath;
+    std::string logFilePath;
 };

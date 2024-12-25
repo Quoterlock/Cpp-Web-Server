@@ -8,7 +8,7 @@
 class Router {
     private:
         StaticFilesManager _files;
-        Logger _logger;
+        Logger& _logger;
         HtmlRenderEngine _pages;
         httpResponse getNotFoundResponse();
         httpResponse getBadRequest(std::string msg);
@@ -19,7 +19,7 @@ class Router {
         std::string getStaticResource(std::string href);
         httpResponse handleStaticFiles(std::string reqPath);
     public:
-        Router();
-        Router(Logger logger, HtmlRenderEngine htmlRenderer, StaticFilesManager staticFiles);
+        Router(Logger& logger, HtmlRenderEngine& htmlRenderer,
+                StaticFilesManager& staticFiles);
         httpResponse route(httpRequest request);
 };

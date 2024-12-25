@@ -17,6 +17,10 @@
 #include<unistd.h>
 
 #include "serverConfig.h"
+#include "logger.h"
+#include "router.h"
+#include "staticFilesManager.h"
+#include "pagesManager.h"
 
 struct WorkerConfig {
     std::string pagesPath;
@@ -41,9 +45,13 @@ private:
     std::mutex _consoleMutex;
     bool _stopProcessing = false;
     int _serverSocket;
-    ServerConfig config;
-    
+    ServerConfig _config;
 
+    // dependencies
+    Logger _logger;
+    HtmlRenderEngine _pages;
+    StaticFilesManager _files;
+    
     static void* clientHandlerWrapper(void* args);
     void* clientHandler();
     void initServerSocket(int port, std::string address, int maxClientsCount);

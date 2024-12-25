@@ -29,7 +29,8 @@ int main(){
 
         "../pages/",
         "../pages/components/",
-        "../www/"
+        "../www/",
+        "log.txt"
     };
 
     server = new HttpServer(config);
