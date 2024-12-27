@@ -6,6 +6,7 @@ add_library(server_modules STATIC
     pagesManager.cpp
     staticFilesManager.cpp
     stringUtils.cpp
+    json.hpp
 )
     
 target_include_directories(server_modules

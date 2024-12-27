@@ -3,6 +3,7 @@
 #include "router.h"
 #include "pagesManager.h"
 #include "staticFilesManager.h"
+#include "json.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -83,10 +84,26 @@ httpResponse Router::getNotFoundResponse(){
     return res;
 }
 
+httpResponse Router::getOkResponse(std::string msg){
+    httpResponse res;
+    res.status_code = 200;
+    res.status_message = msg;
+    res.body = msg;
+    return res;
+}
+
 httpResponse Router::getBadRequest(std::string msg){
     httpResponse res;
-    res.status_code = 500;
+    res.status_code = 400;
     res.status_message = "Bad request";
+    res.body = msg;
+    return res;
+}
+
+httpResponse Router::getServerSideErrorResponse(std::string msg){
+    httpResponse res;
+    res.status_code = 500;
+    res.status_message = "Internal error";
     res.body = msg;
     return res;
 }
@@ -99,6 +116,17 @@ httpResponse Router::getHtmlPageResponse(std::string pageName){
     if(res.body == "")
         return getBadRequest("Page not found");
     return res;
+}
+
+httpResponse Router::jsonPage(httpRequest request){
+    try {
+    auto body = nlohmann::json::parse(request.body);
+    _logger.log(body["username"]); 
+    return getOkResponse(body["username"]);
+    } catch (const std::exception& e){
+        _logger.log(e.what());
+        return getServerSideErrorResponse("Something goes wrong");
+    }
 }
 
 httpResponse Router::homePage(httpRequest request){
@@ -138,6 +166,9 @@ httpResponse Router::route(httpRequest request){
     }
     else if(strcmp(path.c_str(), "/updates") == 0) {
         response = updatesPage(request);
+    } 
+    else if(strcmp(path.c_str(), "/json")==0){
+        response = jsonPage(request);
     }
     else if(strcmp(path.c_str(), "/favicon.ico") == 0){
         auto body = _files.getSiteIcon();
@@ -151,7 +182,7 @@ httpResponse Router::route(httpRequest request){
 }
 
 httpResponse Router::handleStaticFiles(std::string reqPath){
-    auto splitPath = parsePath(reqPath);
+        auto splitPath = parsePath(reqPath);
         for(auto item : splitPath){
             _logger.log("path item: " + item);
         }

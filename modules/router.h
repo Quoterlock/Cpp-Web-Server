@@ -10,14 +10,22 @@ class Router {
         StaticFilesManager _files;
         Logger& _logger;
         HtmlRenderEngine _pages;
-        httpResponse getNotFoundResponse();
-        httpResponse getBadRequest(std::string msg);
-        httpResponse getHtmlPageResponse(std::string pageName);
+        
+        // custom entrypoints
+        httpResponse jsonPage(httpRequest request);
         httpResponse homePage(httpRequest request);
         httpResponse aboutPage(httpRequest req);
         httpResponse updatesPage(httpRequest req);
-        std::string getStaticResource(std::string href);
+        
+        // default entrypoints
+        httpResponse getOkResponse(std::string msg);
+        httpResponse getServerSideErrorResponse(std::string msg);
+        httpResponse getNotFoundResponse();
+        httpResponse getBadRequest(std::string msg);
+        httpResponse getHtmlPageResponse(std::string pageName);
         httpResponse handleStaticFiles(std::string reqPath);
+        
+        std::string getStaticResource(std::string href);
     public:
         Router(Logger& logger, HtmlRenderEngine& htmlRenderer,
                 StaticFilesManager& staticFiles);
