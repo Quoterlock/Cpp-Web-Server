@@ -12,7 +12,7 @@ class Router {
         HtmlRenderEngine _pages;
         
         // custom entrypoints
-        httpResponse jsonPage(httpRequest request);
+        httpResponse reportsPage(httpRequest request);
         httpResponse homePage(httpRequest request);
         httpResponse aboutPage(httpRequest req);
         httpResponse updatesPage(httpRequest req);

@@ -118,19 +118,18 @@ httpResponse Router::getHtmlPageResponse(std::string pageName){
     return res;
 }
 
-httpResponse Router::jsonPage(httpRequest request){
-    try {
-    auto body = nlohmann::json::parse(request.body);
-    _logger.log(body["username"]); 
-    return getOkResponse(body["username"]);
-    } catch (const std::exception& e){
-        _logger.log(e.what());
-        return getServerSideErrorResponse("Something goes wrong");
-    }
-}
-
 httpResponse Router::homePage(httpRequest request){
-    return getHtmlPageResponse("home");
+    // handle ajax request
+    if(strcmp(request.method.c_str(), "POST") == 0){
+        auto body = nlohmann::json::parse(request.body);
+        httpResponse res;
+        res.status_code = 200;
+        res.headers.emplace_back("Context-Type", "application/json");
+        res.body = "{\"msg\": \"Did you say something?\"";
+        return res;
+    } else {
+        return getHtmlPageResponse("home");
+    }
 }
 
 httpResponse Router::aboutPage(httpRequest req){
@@ -139,6 +138,19 @@ httpResponse Router::aboutPage(httpRequest req){
 
 httpResponse Router::updatesPage(httpRequest req){
     return getHtmlPageResponse("updates");
+}
+
+httpResponse Router::reportsPage(httpRequest req){
+    if(req.method == "POST"){
+        auto bodyJson = nlohmann::json::parse(req.body);    
+        std::string username = bodyJson["username"];
+        std::string msg = bodyJson["report-message"];
+        _logger.log("Username:" + username);
+        _logger.log("Message:" + msg);
+        return getHtmlPageResponse("report-result");
+    } else {
+        return getHtmlPageResponse("reports");
+    }
 }
 
 /* public methods */
@@ -167,13 +179,8 @@ httpResponse Router::route(httpRequest request){
     else if(strcmp(path.c_str(), "/updates") == 0) {
         response = updatesPage(request);
     } 
-    else if(strcmp(path.c_str(), "/json")==0){
-        response = jsonPage(request);
-    }
-    else if(strcmp(path.c_str(), "/favicon.ico") == 0){
-        auto body = _files.getSiteIcon();
-        //_logger.log("Icon body:\n" + body);
-        response = getStaticFileResponse(body, "ico");
+    else if(strcmp(path.c_str(), "/reports")==0){
+        response = reportsPage(request);
     }
     else { 
         response = handleStaticFiles(path);

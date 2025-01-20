@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html land="en">
+    @{head}
+<body>
+    @{navbar}
+    <form method="POST" id="reportForm">
+        <div class="mb-3">
+            <label for="username" class="form-label">Enter your name</label>
+            <input type="text" class="form-control" name="username"
+                id="username">
+        </div>
+        <div class="mb-3">
+            <label for="report-message" class="form-label">Enter your name</label>
+            <input type="text" class="form-control" name="report-message"
+                id="report-message">
+        </div>
+        <button type="submit" class="btn btn-primary">Send</button>
+
+        <script>
+        // Capture form submit event
+        document.getElementById('reportForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting the usual way
+
+            // Get form values
+            const username = document.getElementById('username').value;
+            const message = document.getElementById('report-message').value;
+
+            // Create JSON object
+            const jsonData = {
+                username: username,
+                "report-message": message
+            };
+
+            // Send JSON data using Fetch API
+            fetch('http://localhost:5050/reports', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(jsonData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</form> 
+</body
+</html

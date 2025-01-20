@@ -1,29 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Updates Log</title>
-</head>
+    @{head}
 <body>
-    <ul style="list-style: none;">
-        <li style="display: inline;">
-            <a href="http://localhost:8080">Home</a>
-        </li>
-        <li style="display: inline;">
-            <a href="http://localhost:8080/updates">[Updates]</a>
-        </li>
-        <li style="display: inline;">
-            <a href="http://localhost:8080/about">About</a>
-        </li>
-    </ul>
-    <h1>Update v0.1 (2024.08.07)</h1>
-    <p>The first version has:</p>
-    <ul>
-        <li>routing</li>
-        <li>request headers parsing</li>
-        <li>request cookies parsing</li>
-        <li>HTML page response</li>
-    </ul>
+    @{navbar}
+    <div class="col-7 mx-auto mt-2">
+        <h2>Updates:</h2>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Update beta-v0.1 (2024.08.07)</h5>
+                <p class="card-text">Routing, request parsing, HTML page response support</p> 
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Update beta-v0.2 (2025.01.04)</h5>
+                <p class="card-text">Static files support (css/js), json request body parsing, cookies, optimized concurrency</p> 
+            </div>
+        </div>
+    </div>
 </body>
 </html>

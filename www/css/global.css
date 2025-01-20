@@ -1,4 +1,11 @@
-body {
+.welcome-header {
+    height: 300px;
+    width: 100%;
     background-color: black;
-    color: white !important;
+    color: white;
 }
+
+.card-style {
+    min-height: 300px;
+}
+

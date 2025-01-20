@@ -1,26 +1,13 @@
 #include "httpReq.h"
 #include "httpRes.h"
 #include "httpParser.h"
-#include "stringUtils.h"
 
 #include <iostream>
 #include <fstream>
 #include <streambuf>
 #include <sstream> 
 
-std::string sanitize(std::string value) {
-    return trim(value);
-}
-
 httpRequest decodeHttp(std::string msg) {
-    /* Message structure
-     * <METHOD> <ROUTE> HTTP/1.1 \r\n
-     * <HEADER>: <VALUE> \r\n
-     * Cookie: <COOKIE>; <COOKIE> \r\n
-     * <EMPTY LINE> \r\n
-     * <BODY>
-     */
-
     httpRequest request;
 
     // Split the request into lines
@@ -34,45 +21,43 @@ httpRequest decodeHttp(std::string msg) {
 
     // Parse headers
     while (std::getline(iss, line) && !line.empty()) {
-        // check on end of headers
-        if(line == "\r")
-            break;
+        size_t pos = line.find(':');
+        if (pos != std::string::npos) {
+            std::string key = line.substr(0, pos);
+            std::string value = line.substr(pos + 2); // Skip ': ' after key
 
-        size_t dividerPos = line.find(':');
-        if (dividerPos != std::string::npos) {
-            std::string key = sanitize(line.substr(0, dividerPos));
-            std::string value = sanitize(line.substr(dividerPos + 1));
-           
-            if (key == "Cookie")
+            // Insert or update header
+            request.headers[key] = value;
+
+            // Parse cookies if present
+            if (key == "Cookie") {
                 decodeCookies(value, request);
-            else 
-                request.headers[key] = value;
+            }
         }
     }
 
     // Parse body
+    // The body might be empty or span multiple lines, adjust accordingly
     std::ostringstream bodyStream;
-    // combine lines with \n (except last line)
-    if(std::getline(iss, line)){
-        bodyStream << line;
-        while (std::getline(iss, line))
-            bodyStream << "\n" << line;
+    while (std::getline(iss, line)) {
+        bodyStream << line << "\n"; // Append each line of the body
     }
     request.body = bodyStream.str(); // Set the body content
-    
+
     return request;
 }
 
 void decodeCookies(std::string value, httpRequest& request) {
     std::istringstream cookiesStream(value);
     std::string cookie;
-    // read cookies
     while (std::getline(cookiesStream, cookie, ';')) {
-        size_t dividerPos = cookie.find('=');
-        if (dividerPos!= std::string::npos) {
-            // add cookie
-            std::string cookieKey = sanitize(cookie.substr(0, dividerPos));
-            std::string cookieValue = sanitize(cookie.substr(dividerPos + 1));
+        size_t eqPos = cookie.find('=');
+        if (eqPos != std::string::npos) {
+            std::string cookieKey = cookie.substr(0, eqPos);
+            std::string cookieValue = cookie.substr(eqPos + 1);
+            // Trim whitespace
+            cookieKey.erase(cookieKey.find_last_not_of(" \t") + 1);
+            cookieValue.erase(0, cookieValue.find_first_not_of(" \t"));
             request.cookies[cookieKey] = cookieValue;
         }
     }

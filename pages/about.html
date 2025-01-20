@@ -1,28 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Project</title>
-</head>
+    @{head}
 <body>
-    <ul style="list-style: none;">
-        <li style="display: inline;">
-            <a href="http://localhost:8080">Home</a>
-        </li>
-        <li style="display: inline;">
-            <a href="http://localhost:8080/updates">Updates</a>
-        </li>
-        <li style="display: inline;">
-            <a href="http://localhost:8080/about">[About]</a>
-        </li>
-    </ul>
-    <h1>About this project</h1>
-    <p>This is a simple web server written in C++ 
+    @{navbar}
+    <div class="col-7 mx-auto text-center mt-2">
+        <h2>About this project</h2>
+        <p>This is a simple web server written in C++ 
         for learning purposes. It shows the full 
         process of connecting server and client via ports, 
         sending and receiving messages, 
         decoding request messages, building response messages, 
         routing and other cool and necessary things.</p>
+    </div>
 </body>
 </html>

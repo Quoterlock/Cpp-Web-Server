@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="static/css/global.css"/>
-    <title>Home Page</title>
-</head>
+@{head}
 <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    @{navbar}
+    <div class="welcome-header d-flex">
+        <h1 class="mx-auto my-auto">Made in C++</h1> 
+    </div>
+    <div class="container col-7 mt-2">
+        <h2 class="text-center">Features</h2>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Multi-threading</h5>
+                <p class="card-text">Handles multiple client requests simultaneously,
+        ensuring efficient resource utilization and faster response times.</p> 
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Routing</h5>
+                <p class="card-text">Manages URL mappings to server-side logic,
+        enabling the handling of various endpoints and dynamic content delivery.</p> 
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Static Files Support</h5>
+                <p class="card-text">Serves static resources like HTML, CSS,
+        JavaScript, and media files directly from the server,
+        reducing processing overhead.</p> 
+            </div>
+        </div>
 
-    <p>there is a component below</p>
-    @{text}
-
-    <ul style="list-style: none; ">
-        <li style="display: inline;">
-            <a href="http://localhost:8080">[Home]</a>
-        </li>
-        <li style="display: inline;">
-            <a href="http://localhost:8080/updates">Updates</a>
-        </li>
-        <li style="display: inline;">
-            <a href="http://localhost:8080/about">About</a>
-        </li>
-    </ul>
-    <h1 style="text-align: center;">Welcome to The Server!</h1>
+    </div>
 </body>
 </html>
