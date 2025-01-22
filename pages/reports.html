@@ -3,6 +3,11 @@
     @{head}
 <body>
     @{navbar}
+    <div class="mx-auto col-sm-12 col-md-7 mt-3">
+    <div class="alert alert-success hidden" id="message-cloud" role="alert">
+        <h4 class="alert-heading">Success!</h4>
+        <p>Thank you for your important opinion.</p>
+    </div>
     <form method="POST" id="reportForm">
         <div class="mb-3">
             <label for="username" class="form-label">Enter your name</label>
@@ -10,12 +15,13 @@
                 id="username">
         </div>
         <div class="mb-3">
-            <label for="report-message" class="form-label">Enter your name</label>
+            <label for="report-message" class="form-label">Enter your message</label>
             <input type="text" class="form-control" name="report-message"
                 id="report-message">
         </div>
-        <button type="submit" class="btn btn-primary">Send</button>
-
+        <button type="submit" class="btn btn-primary">Send to the server</button>
+    </form> 
+    </div>
         <script>
         // Capture form submit event
         document.getElementById('reportForm').addEventListener('submit', function(event) {
@@ -39,15 +45,22 @@
                 },
                 body: JSON.stringify(jsonData)
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+            .then(resp => {
+                console.log(resp);
+                if(resp.status % 400 < 200){ // 400 - 500
+                    console.error('Error:', resp.body);
+                    const messageCloud = document.getElementById('message-cloud');
+                    if(messageCloud.classList.contains('hidden')){
+                        messageCloud.classList.add('hidden');
+                    } 
+                } else if(resp.status == 200) {
+                    console.log('Success:', resp);
+                    document.getElementById('message-cloud').classList.remove('hidden')
+                } else {
+                    console.error("Something goes wrong", resp);
+                }
             });
         });
     </script>
-</form> 
-</body
-</html
+</body>
+</html>

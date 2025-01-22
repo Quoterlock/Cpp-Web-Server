@@ -41,6 +41,19 @@ std::string getContentType(const std::string& type) {
     }
 }
 
+static httpResponse getTextMessageResponse(const std::string& msg){
+    httpResponse response;
+    // Set status code and message
+    response.status_code = 200;
+    response.status_message = "OK";
+    // Set headers
+    response.headers.push_back({"Content-Type", "application/json"});
+    // Set body
+    response.body = msg;
+    return response;
+}
+
+
 httpResponse getStaticFileResponse(const std::string& content, const std::string& type) {
     httpResponse response;
     
@@ -145,9 +158,13 @@ httpResponse Router::reportsPage(httpRequest req){
         auto bodyJson = nlohmann::json::parse(req.body);    
         std::string username = bodyJson["username"];
         std::string msg = bodyJson["report-message"];
+        if(msg == "" || username == ""){
+            _logger.log("Username and repost-message should be non-empty!");
+            return getBadRequest("{\"msg\":\"Input error: Username and repost-message should be non-empty!\"}");
+        }
         _logger.log("Username:" + username);
         _logger.log("Message:" + msg);
-        return getHtmlPageResponse("report-result");
+        return getTextMessageResponse("{\"msg\":\"Thank you for your report!\"}");
     } else {
         return getHtmlPageResponse("reports");
     }

@@ -1,6 +1,10 @@
 #include "logger.h"
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <iomanip>
+#include <sstream>
+#include <string>
 
 Logger::Logger(): _logFilePath("Log.txt"), _title("Server log"){
 }
@@ -10,11 +14,21 @@ Logger::~Logger(){
         _logFile.close();
 }
 
+static std::string getTimeStamp() {
+    auto now = std::chrono::system_clock::now();
+    std::time_t now_time = std::chrono::system_clock::to_time_t(now);
+
+    std::ostringstream oss;
+    oss << std::put_time(std::localtime(&now_time), "%Y-%m-%d %H:%M:%S");
+    return oss.str();
+}
+
 void Logger::log(std::string msg) {
+    auto timestamp = getTimeStamp();
     {
         std::lock_guard<std::mutex> lock(_consoleMutex);
         if(_logToConsole)
-            std::cout << "["<< _title << "] " << msg << "\n";
+            std::cout << "["<< _title << "]:["<< timestamp <<"] " << msg << "\n";
         if(_logToFile)
             logToFileInternal(msg); 
     }

@@ -9,3 +9,8 @@
     min-height: 300px;
 }
 
+.hidden {
+    visibility: hidden !important;
+    max-height: 0px !important;
+}
+

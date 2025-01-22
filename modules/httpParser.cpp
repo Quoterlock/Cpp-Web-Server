@@ -19,11 +19,24 @@ httpRequest decodeHttp(std::string msg) {
     std::istringstream firstLine(line);
     firstLine >> request.method >> request.path;  // Extract method
 
+    // TODO: Fix vulnerable code
+    // sanitize and validate values
     // Parse headers
-    while (std::getline(iss, line) && !line.empty()) {
+    while (std::getline(iss, line)) {
+        // Remove potential trailing '\r'
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+
+        // Stop parsing headers on a blank line
+        if (line.empty()) {
+            break;
+        }
+
         size_t pos = line.find(':');
         if (pos != std::string::npos) {
             std::string key = line.substr(0, pos);
+            // TODO : skip ":" then trim
             std::string value = line.substr(pos + 2); // Skip ': ' after key
 
             // Insert or update header
@@ -40,9 +53,13 @@ httpRequest decodeHttp(std::string msg) {
     // The body might be empty or span multiple lines, adjust accordingly
     std::ostringstream bodyStream;
     while (std::getline(iss, line)) {
-        bodyStream << line << "\n"; // Append each line of the body
+        // Remove potential trailing '\r'
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+        bodyStream << line << '\n';
     }
-    request.body = bodyStream.str(); // Set the body content
+    request.body = bodyStream.str();
 
     return request;
 }

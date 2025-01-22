@@ -49,7 +49,11 @@ void* HttpServer::clientHandler(){
             _logger.log("Error receiving message!");
             close(clientSocket);
             continue; // get next task
-        } 
+        } else if(bytesReceived == 0) {
+            _logger.log("Client closed a connection");
+            close(clientSocket);
+            continue;
+        }
         _logger.log(buffer);
     
         // process message
@@ -109,6 +113,7 @@ void HttpServer::initServerSocket(int port, std::string address, int maxClientsC
         _logger.log("Error creating socket!");
         exit(EXIT_FAILURE);
     }
+
     // config address
     struct sockaddr_in serverAddr;
     memset(&serverAddr, 0, sizeof(serverAddr));
@@ -123,6 +128,14 @@ void HttpServer::initServerSocket(int port, std::string address, int maxClientsC
         _logger.log("Error binding server socket");
         exit(EXIT_FAILURE);
     }
+
+    // set timeout (afk mode)
+    struct timeval timeout;
+    timeout.tv_sec = 60;  // Timeout of 20 seconds
+    timeout.tv_usec = 0;
+    setsockopt(_serverSocket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    
+
     // set listener
     if(listen(_serverSocket, maxClientsCount) == -1) {
         _logger.log("Error listening!");
